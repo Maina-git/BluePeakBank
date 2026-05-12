@@ -17,7 +17,7 @@ if (!signedIn) {
         headerShown: false,
 
         tabBarStyle: {
-          height: 80,
+          height: 100,
           paddingBottom: 10,
           backgroundColor: "#FFFFFF",
           borderTopWidth: 0,
