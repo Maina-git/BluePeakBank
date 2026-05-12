@@ -1,98 +1,144 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+} from "react-native";
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import { LineChart } from "react-native-chart-kit";
+import { COLORS } from "../../themes/theme";
 
-export default function HomeScreen() {
+const screenWidth = Dimensions.get("window").width;
+
+export default function Home() {
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+    <ScrollView style={styles.container}>
+      
+      <Text style={styles.greeting}>Welcome Back</Text>
+      <Text style={styles.bank}>BluePeak Bank</Text>
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+      {/* Balance Card */}
+      <View style={styles.balanceCard}>
+        <Text style={styles.balanceLabel}>
+          Available Balance
+        </Text>
+
+        <Text style={styles.balance}>
+          KES 120,450
+        </Text>
+      </View>
+
+      {/* Analytics */}
+      <Text style={styles.sectionTitle}>
+        Spending Analytics
+      </Text>
+
+      <LineChart
+        data={{
+          labels: ["Mon", "Tue", "Wed", "Thu", "Fri"],
+          datasets: [
+            {
+              data: [2000, 4500, 3000, 7000, 5000],
+            },
+          ],
+        }}
+        width={screenWidth - 40}
+        height={220}
+        chartConfig={{
+          backgroundGradientFrom: "#FFFFFF",
+          backgroundGradientTo: "#FFFFFF",
+          decimalPlaces: 0,
+
+          color: () => COLORS.primary,
+
+          labelColor: () => "#64748B",
+        }}
+        bezier
+        style={styles.chart}
+      />
+
+      {/* Transactions */}
+      <Text style={styles.sectionTitle}>
+        Recent Transactions
+      </Text>
+
+      <View style={styles.transaction}>
+        <Text>Supermarket</Text>
+        <Text>-KES 2,400</Text>
+      </View>
+
+      <View style={styles.transaction}>
+        <Text>Salary</Text>
+        <Text>+KES 50,000</Text>
+      </View>
+
+      <View style={styles.transaction}>
+        <Text>Electricity</Text>
+        <Text>-KES 1,200</Text>
+      </View>
+
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+    padding: 20,
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+
+  greeting: {
+    marginTop: 50,
+    fontSize: 16,
+    color: COLORS.lightText,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+
+  bank: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: COLORS.primary,
+    marginBottom: 25,
+  },
+
+  balanceCard: {
+    backgroundColor: COLORS.primary,
+    padding: 25,
+    borderRadius: 20,
+    marginBottom: 30,
+  },
+
+  balanceLabel: {
+    color: "#CBD5E1",
+  },
+
+  balance: {
+    color: "#FFFFFF",
+    fontSize: 30,
+    fontWeight: "bold",
+    marginTop: 10,
+  },
+
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: "600",
+    marginBottom: 15,
+    color: COLORS.text,
+  },
+
+  chart: {
+    borderRadius: 20,
+    marginBottom: 30,
+  },
+
+  transaction: {
+    backgroundColor: "#FFFFFF",
+    padding: 18,
+    borderRadius: 14,
+    marginBottom: 12,
+
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });
